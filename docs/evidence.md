@@ -1,5 +1,11 @@
 # Evidence register
 
+This inherited register records the **original source repository and isolated
+setup**, not a new deployment from Demo 18. See the
+[teaching-edition build record](../iteration/BUILD-RECORD.md) for provenance and
+[this edition's CI](https://github.com/xavierxmorris/ghcp-demo-18-entra-github-agent-identity/actions)
+for its own hosted checks.
+
 Status as of 2026-09-29: **local verification complete; live setup blocked on
 tenant-admin permission grants before paid compute deployment**.
 Do not convert this register to a deployment-success claim without completing

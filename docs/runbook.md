@@ -3,6 +3,10 @@
 Last source verification: 2026-09-29. Azure CLI 2.87.0, Bicep 0.46.1,
 .NET SDK 10.0.401, MSAL.NET 4.90.1 and Checkov 3.3.19 were used locally.
 
+This is the Demo 18 teaching edition. Use a fresh, explicitly approved setup;
+the original deployment's local state is not included. The
+[build guide](../BUILD-GUIDE.md) explains the design and the local-only path.
+
 ## Approval and prerequisites
 
 No script should be used as an implicit approval to change a live tenant.
@@ -30,11 +34,15 @@ drawing, tenant state, token, private key or real customer data.
 The following examples use placeholders. Windows commands assume the repository
 root and an already authenticated `az` and `gh`. No command creates a client
 secret or a runtime PAT.
+Choose a new resource-group name and a unique lowercase alphanumeric prefix
+(3-11 characters). Supply them explicitly to override the inherited source
+demo's defaults; do not reuse another workshop or the original setup.
 
 ```powershell
 az account set --subscription '<subscription-guid>'
 .\scripts\Initialize-Demo.ps1 -SubscriptionId '<subscription-guid>' `
-  -Repository 'YOUR-ORG/identity-sandbox'
+  -Repository 'YOUR-ORG/identity-sandbox' `
+  -ResourceGroup 'rg-your-unique-demo' -Prefix 'yourdemo01'
 .\scripts\Initialize-Entra.ps1 -AcknowledgeDirectoryChanges
 .\scripts\Initialize-Sandbox.ps1 -AcknowledgeSandboxChanges
 .\scripts\Deploy-Infrastructure.ps1 -AcknowledgeCostsAndLiveChanges
@@ -138,7 +146,7 @@ Push and commit the sanitised source first. The script requires a clean worktree
 and a commit present in the intended public repository.
 
 ```powershell
-.\scripts\Publish-Package.ps1 -PublicRepository 'YOUR-USER/entra-github-agent-identity-demo' `
+.\scripts\Publish-Package.ps1 -PublicRepository 'YOUR-USER/ghcp-demo-18-entra-github-agent-identity' `
   -AcknowledgePublicBinaryPublication
 .\scripts\Deploy-Package.ps1 -AcknowledgeLiveCodeDeployment
 .\scripts\Set-DemoRuntime.ps1 -Enabled $true -AcknowledgeGitHubWrites
@@ -220,7 +228,7 @@ The Azure/Entra cleanup script requires the exact group name and verifies
 ownership; it deliberately does not delete GitHub repositories or organisations.
 
 ```powershell
-.\scripts\Remove-Demo.ps1 -ConfirmResourceGroup 'rg-agentid-demo-3709' `
+.\scripts\Remove-Demo.ps1 -ConfirmResourceGroup '<exact-resource-group-from-your-local-state>' `
   -AcknowledgePermanentDemoDeletion
 ```
 

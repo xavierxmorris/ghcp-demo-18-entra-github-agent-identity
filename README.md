@@ -1,10 +1,49 @@
-# Entra-GitHub agent identity demo
+# Demo 18: build an Entra-GitHub agent identity broker with Copilot
 
 A narrowly scoped operation broker demonstrating two distinct authorisation paths:
 autonomous workload identity and delegated workforce-user identity. Entra
 authorises a request; the broker applies a capability policy; a GitHub App
 performs the approved repository action. This is not automatic identity mapping
 between Entra and GitHub.
+
+**Start with [why we chose this design and how we built it](BUILD-GUIDE.md).**
+This self-contained teaching edition preserves the
+[original public implementation](https://github.com/xavierxmorris/entra-github-agent-identity-demo)
+and adds reusable prompts, presenter/workshop paths and a safe local runner.
+It is part of the [GHCP demo suite](https://github.com/xavierxmorris/ghcp-demos).
+
+| Track | Start here | Time after setup |
+| --- | --- | --- |
+| Understand why and reproduce the build | [Build guide](BUILD-GUIDE.md) | Read at your own pace |
+| Present the design and evidence | [Run sheet](RUN-SHEET.md) | 5-7 minutes |
+| Practice with Copilot and a bounded regression test | [Workshop](WORKSHOP.md) and [prompts](PROMPTS.md) | 60-90 minutes |
+| Inspect the actual build history | [Sanitised build record](iteration/BUILD-RECORD.md) | Recorded evidence, not a live replay |
+
+## Quick start: no cloud credentials needed
+
+Use PowerShell 7.4+ for the runner and .NET SDK 10.0.401 or a compatible
+servicing patch for the application checks.
+
+```powershell
+git clone https://github.com/xavierxmorris/ghcp-demo-18-entra-github-agent-identity.git
+Set-Location .\ghcp-demo-18-entra-github-agent-identity
+.\go.ps1 -Check
+.\go.ps1 -NoBrowser
+.\go.ps1 -Verify -NoBrowser
+```
+
+| Mode | Exact behavior |
+| --- | --- |
+| Default | Prints a five-beat walkthrough and opens the local build guide using its default application; no deployment, model run or PR |
+| `-NoBrowser` | Suppresses opening the guide; combine with the default or `-Manual` presentation |
+| `-Manual` | Pauses between presenter beats |
+| `-Check` | Required nonempty-file preflight only; not application tests |
+| `-Verify` | Restore/build/test broker, build delegated client, offline script and runner/docs contracts; package restore may need network |
+| `-Live` | Starts interactive Copilot **authoring**, not Azure deployment, with an initial read-only planning prompt; no permission-bypass flags are added |
+
+Choose only one of `-Check`, `-Verify` or `-Live`. `-Manual` is for presentation
+only. Inspect your inherited Copilot permissions before live authoring; the
+prompt and repository instructions are not a security sandbox.
 
 ## Current state
 
@@ -14,6 +53,8 @@ bootstrap scripts and delegated client are implemented and locally verified.
 This is not a production deployment or a verified million-user implementation.
 Live setup has reached a tenant-admin permission gate; paid compute remains
 undeployed. See the [admin handoff](docs/runbook.md#if-tenant-permission-grants-are-denied).
+That state belongs to the original isolated setup, not a deployment created by
+cloning this repository. The clone contains no tenant state or credentials.
 
 ```mermaid
 flowchart LR
@@ -88,3 +129,5 @@ automatically. Actual deployment state stays in ignored `.local`.
   million-user test. See the explicitly documented scan exceptions.
 - No supplied customer diagrams, meeting transcript or internal roadmap
   material are included. This is an independently written generic example.
+- The prompts are sanitised reusable reconstructions, not a private transcript.
+  Local and hosted tests are distinct from the outstanding live identity proof.
